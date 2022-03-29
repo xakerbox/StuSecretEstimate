@@ -19,6 +19,3 @@ connection.connect((err) => {
 });
 
 export { connection };
-
-
-

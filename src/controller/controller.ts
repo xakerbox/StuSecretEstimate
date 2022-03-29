@@ -24,7 +24,7 @@ export class ControllerClass {
         [userData.login, userData.password, userData.email, "USER"],
         (err, result) => {
           if (err) {
-            res.json({ error: "The user already exist" });
+            res.json({ error: "The user already exist." });
           } else {
             res.json({
               status: "Successfuly registered!",
@@ -81,6 +81,11 @@ export class ControllerClass {
                     { expiresIn: "10m" }
                   );
                   res.json({
+                    pass: validation,
+                    authToken: token,
+                    result: result,
+                  });
+                  console.log({
                     pass: validation,
                     authToken: token,
                     result: result,

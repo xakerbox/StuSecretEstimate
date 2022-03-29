@@ -1,8 +1,6 @@
-import express, { NextFunction, Response } from "express";
+import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
-import { connection as db } from "../db/dbConnection";
 import dotenv from "dotenv";
-import { RowDataPacket } from "mysql2";
 dotenv.config({ path: ".././.env" });
 
 export class AuthValidation {

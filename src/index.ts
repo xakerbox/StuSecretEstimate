@@ -1,11 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
 import router from "./routes/router";
 import dotenv from "dotenv";
 dotenv.config({path: '.././.env'});
 import { exec } from "child_process";
-import { stdout } from "process";
 
 const app = express();
 
@@ -22,7 +20,6 @@ exec('node -v', (err, stdout) => {
 
 
 app.use(bodyParser.json());
-app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(router);
