@@ -106,7 +106,7 @@ export class ControllerClass {
   }
 
   async getCalculations(req: Request, res: Response) {
-    exec(`python3 etotal.py ${req.params.est}`, (err, stdout, stderr) => {
+    exec(`python3 etotal_updated.py ${req.params.est}`, (err, stdout, stderr) => {
       console.log(stdout);
       res.json({ sucess: stdout, error: stderr });
     });
