@@ -8,12 +8,13 @@ exports.ControllerClass = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const fs_1 = __importDefault(require("fs"));
 const dbConnection_1 = require("../db/dbConnection");
 const dbConnection_tesla_1 = require("../db/dbConnection_tesla");
 const child_process_1 = require("child_process");
-const fs_1 = __importDefault(require("fs"));
 dotenv_1.default.config({ path: ".././.env" });
 const JWT_SECRET = process.env.JWT_SECRET;
+//CHANGE IT AT MIGRATION
 const HOST_NAME = "localhost:4200";
 class ControllerClass {
     async signUp(req, res, next) {
@@ -143,16 +144,20 @@ class ControllerClass {
         try {
             (0, child_process_1.exec)(`python3 rgenx.py ${req.params.enum}`, (err, stdout, stderr) => {
                 console.log(stdout);
-                if (err) {
-                    res.json({ error: "No such estimate exist." });
-                }
-                else {
-                    res.json({
-                        sucess: stdout.replace("\n", " "),
-                        estimate_pdf: `http://${HOST_NAME}/report/${req.params.enum}`,
-                        error: stderr,
-                    });
-                }
+                res.json({
+                    sucess: stdout.replace("\n", " "),
+                    estimate_pdf: `http://${HOST_NAME}/report/${req.params.enum}`,
+                    error: stderr,
+                });
+                // if (err) {
+                //   res.json({ error: "No such estimate exist." });
+                // } else {
+                //   res.json({
+                //     sucess: stdout.replace("\n", " "),
+                //     estimate_pdf: `http://${HOST_NAME}/report/${req.params.enum}`,
+                //     error: stderr,
+                //   });
+                // }
             });
         }
         catch (e) {
@@ -161,10 +166,15 @@ class ControllerClass {
         }
     }
     sendPdf(req, res) {
+        // try {
+        //   checkReportExistance(req.params.enum, res)
+        // } catch(e) {
+        //   res.json(e)
+        // }
         try {
-            console.log(__dirname);
-            const file = fs_1.default.createReadStream(`/Users/vladimir/StuTeslaProj/StuSecretEstimate/pub/estimate_reports/EST_${req.params.enum}.pdf`);
-            const stat = fs_1.default.statSync(`/Users/vladimir/StuTeslaProj/StuSecretEstimate/pub/estimate_reports/EST_${req.params.enum}.pdf`);
+            // checkReportExistance(req.params.enum, res)
+            const file = fs_1.default.createReadStream(`/app/pub/estimate_reports/EST_${req.params.enum}.pdf`);
+            const stat = fs_1.default.statSync(`/app/pub/estimate_reports/EST_${req.params.enum}.pdf`);
             res.setHeader("Content-Length", stat.size);
             res.setHeader("Content-Type", "application/pdf");
             res.setHeader("Content-Disposition", `attachment; filename=EST_${req.params.enum}.pdf`);
