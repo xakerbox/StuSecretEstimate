@@ -1,4 +1,5 @@
 #! /usr/local/lib/python3.10
+import pathlib
 
 import sys
 import mysql.connector
@@ -9,7 +10,7 @@ import pymysql
 from tabulate import tabulate
 from db_variables import *
 from datetime import datetime
-from fpdf import FPDF  #pip install fdpf2 ... note !  TWO
+from fpdf import FPDF  #pip install fpdf2 ... note !  TWO
 from random import random
 
 from db_connection_utils import get_head_data
@@ -58,7 +59,11 @@ pdf.set_margins(5, 10, 5)
 pdf.set_auto_page_break(auto=True, margin=5)
 
 # LOGO
-pdf.image('/Users/vladimirkuzin/StuProj/Vlad3ServREST/pub/images/tesla_logo.png', 95, 5, 20)
+# pdf.image('/Users/vladimirkuzin/StuProj/Vlad3ServREST/pub/images/tesla_logo.png', 95, 5, 20) MB_Air path
+# pdf.image('/Users/vladimir/StuTeslaProj/StuSecretEstimate/pub/images/tesla_logo.png', 95, 5, 20) # MB_Pro path
+pdf.image('/app/pub/images/tesla_logo.png', 95, 5, 20) # Docker path
+
+
 pdf.set_xy(55, 25)
 
 # Company Name
@@ -248,9 +253,13 @@ def totalBlock(rows):
 #list_of_works(rows_in_elemnts_list)
 list_of_elines()
 totalBlock(rows_in_elemnts_list) 
-# pdf.output(f'/var/www/vhosts/teslaest.com/httpdocs/estimate_reports/EST_{ehead_data["estnum"]}.pdf')
-pdf.output(f'/Users/vladimirkuzin/StuProj/Vlad3ServREST/pub/estimate_reports/EST_{ehead_data["estnum"]}.pdf')
-print(f'Generating of the report is finished sort of')
+# pdf.output(f'/var/www/vhosts/teslaest.com/httpdocs/estimate_reports/EST_{ehead_data["estnum"]}.pdf') teslaestimate.com path
+# pdf.output(f'/Users/vladimirkuzin/StuProj/Vlad3ServREST/pub/estimate_reports/EST_{ehead_data["estnum"]}.pdf') MB_Air path
+# pdf.output(f'/Users/vladimir/StuTeslaProj/StuSecretEstimate/pub/estimate_reports/EST_{ehead_data["estnum"]}.pdf') #MB_Pro path
+pdf.output(f'/app/pub/estimate_reports/EST_{ehead_data["estnum"]}.pdf') #MB_Pro path
+
+
+print(f'Generating of the report is finished successfuly. Download it by below link on key ESTIMATE_PDF.')
 
 
 

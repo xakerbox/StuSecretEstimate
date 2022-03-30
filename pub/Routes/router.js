@@ -18,5 +18,7 @@ router.get("/list/:userId", tokenValidator.checkAuthorizationToken, controller.l
 router.post("/calculate", tokenValidator.checkAuthorizationToken, controller.getCalculations);
 router.post("/calculate/:est", tokenValidator.checkAuthorizationToken, controller.getCalculations);
 router.post("/test-route/:testNumber", tokenValidator.checkAuthorizationToken, controller.testScript);
-router.post("/estimate/:num", tokenValidator.checkAuthorizationToken, controller.getEstimate);
+router.post("/estimate/:enum", tokenValidator.checkAuthorizationToken, controller.getEstimate);
+router.post("/print/:enum", tokenValidator.checkAuthorizationToken, controller.generatePdf);
+router.get("/report/:enum", controller.sendPdf);
 exports.default = router;

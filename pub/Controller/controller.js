@@ -11,8 +11,10 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const dbConnection_1 = require("../db/dbConnection");
 const dbConnection_tesla_1 = require("../db/dbConnection_tesla");
 const child_process_1 = require("child_process");
+const fs_1 = __importDefault(require("fs"));
 dotenv_1.default.config({ path: ".././.env" });
 const JWT_SECRET = process.env.JWT_SECRET;
+const HOST_NAME = "localhost:4200";
 class ControllerClass {
     async signUp(req, res, next) {
         try {
@@ -22,7 +24,7 @@ class ControllerClass {
             userData.password = hashedPass;
             dbConnection_1.connection.query("INSERT INTO users(user_id, user_login, password, email, role) VALUE (UUID(),?,?,?,?)", [userData.login, userData.password, userData.email, "USER"], (err, result) => {
                 if (err) {
-                    res.json({ error: "The user already exist" });
+                    res.json({ error: "The user already exist." });
                 }
                 else {
                     res.json({
@@ -65,8 +67,13 @@ class ControllerClass {
                     console.log(result);
                     bcrypt_1.default.compare(req.body.password, result[0].password, (err, validation) => {
                         if (validation) {
-                            const token = jsonwebtoken_1.default.sign({ payload: result[0].user_id }, JWT_SECRET, { expiresIn: "10m" });
+                            const token = jsonwebtoken_1.default.sign({ payload: result[0].user_id }, JWT_SECRET, { expiresIn: "100m" });
                             res.json({
+                                pass: validation,
+                                authToken: token,
+                                result: result,
+                            });
+                            console.log({
                                 pass: validation,
                                 authToken: token,
                                 result: result,
@@ -87,31 +94,85 @@ class ControllerClass {
         }
     }
     async getCalculations(req, res) {
-        (0, child_process_1.exec)(`python3 etotal.py ${req.params.est}`, (err, stdout, stderr) => {
+        (0, child_process_1.exec)(`python3 etotal_updated.py ${req.params.est}`, (err, stdout, stderr) => {
             console.log(stdout);
-            res.json({ sucess: stdout, error: stderr });
+            if (!err) {
+                const [epntrate, emecrate, ebodrate, efrarate, estrrate, eglarate, edetrate, eothrate] = stdout.replace('\n', '').split(' ');
+                res.json({
+                    sucess: true,
+                    calculations: {
+                        epntrate,
+                        emecrate,
+                        ebodrate,
+                        efrarate,
+                        estrrate,
+                        eglarate,
+                        edetrate,
+                        eothrate
+                    }
+                });
+            }
+            else {
+                res.json({ err: err });
+            }
         });
     }
     testScript(req, res) {
         (0, child_process_1.exec)(`python3 test.py ${req.params.testNumber}`, (err, stdout, stderr) => {
             console.log(stdout);
-            res.json({ sucess: stdout.replace('\n', '. '), error: stderr });
+            res.json({ sucess: stdout.replace("\n", ". "), error: stderr });
         });
     }
     getEstimate(req, res) {
         try {
-            dbConnection_tesla_1.connection.query(`SELECT estnum, fname, lname, cellph FROM ehead WHERE estnum='${req.params.num}'`, (err, result) => {
+            dbConnection_tesla_1.connection.query(`SELECT estnum, fname, lname, cellph FROM ehead WHERE estnum='${req.params.enum}'`, (err, result) => {
                 console.log(result);
                 if (result != undefined && result.length !== 0) {
-                    res.json({ your_estimate: req.params.num, success: result[0] });
+                    res.json({ your_estimate: req.params.enum, success: result[0] });
                 }
                 else {
-                    res.json({ error: 'No such estimate No exist in DB.' });
+                    res.json({ error: "No such estimate No exist in DB." });
                 }
             });
         }
         catch (e) {
             res.json(e);
+        }
+    }
+    generatePdf(req, res) {
+        try {
+            (0, child_process_1.exec)(`python3 rgenx.py ${req.params.enum}`, (err, stdout, stderr) => {
+                console.log(stdout);
+                if (err) {
+                    res.json({ error: "No such estimate exist." });
+                }
+                else {
+                    res.json({
+                        sucess: stdout.replace("\n", " "),
+                        estimate_pdf: `http://${HOST_NAME}/report/${req.params.enum}`,
+                        error: stderr,
+                    });
+                }
+            });
+        }
+        catch (e) {
+            res.json(e);
+            console.log(e);
+        }
+    }
+    sendPdf(req, res) {
+        try {
+            console.log(__dirname);
+            const file = fs_1.default.createReadStream(`/Users/vladimir/StuTeslaProj/StuSecretEstimate/pub/estimate_reports/EST_${req.params.enum}.pdf`);
+            const stat = fs_1.default.statSync(`/Users/vladimir/StuTeslaProj/StuSecretEstimate/pub/estimate_reports/EST_${req.params.enum}.pdf`);
+            res.setHeader("Content-Length", stat.size);
+            res.setHeader("Content-Type", "application/pdf");
+            res.setHeader("Content-Disposition", `attachment; filename=EST_${req.params.enum}.pdf`);
+            file.pipe(res);
+        }
+        catch (e) {
+            res.json(e);
+            console.log(e);
         }
     }
 }

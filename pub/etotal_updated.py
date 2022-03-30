@@ -148,7 +148,7 @@ if etaxrate is None :
 	    etaxrate = 0
 
 eh1.close()    
-#print  (epntrate, emecrate, ebodrate, efrarate , estrrate , eglarate , edetrate, eothrate)
+print  (epntrate, emecrate, ebodrate, efrarate , estrrate , eglarate , edetrate, eothrate)
 
 eetlpnt = pnthrstotal*float(epntrate)
 eetlbod = bodyhrstotal*float(ebodrate)
