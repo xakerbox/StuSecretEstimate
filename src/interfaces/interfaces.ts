@@ -3,3 +3,8 @@ export interface UserAuth {
     password: string,
     email: string
 }
+
+export enum Environment {
+    DEV = 'TEST',
+    PROD = 'PROD'
+}
