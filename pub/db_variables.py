@@ -1,0 +1,4 @@
+MYSQL_HOST='190.92.148.46'
+MYSQL_USER='stuhero'
+MYSQL_PASSWORD='StuDB!@#$%^2000'
+MYSQL_DB='teslaestimate'
