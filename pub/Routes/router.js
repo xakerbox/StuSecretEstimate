@@ -11,6 +11,7 @@ const auth_controller_1 = require("../controller/auth.controller");
 const tokenValidator = new auth_controller_1.AuthValidation();
 const router = express_1.default.Router();
 const controller = new controller_1.ControllerClass();
+router.get('/', controller.healthChecker);
 router.post("/sign-up", registerSchema_1.registerSchema, requestValidator_1.requestValidation, controller.signUp);
 router.post("/token", controller.getToken);
 router.get("/list", tokenValidator.checkAuthorizationToken, controller.listUsers);

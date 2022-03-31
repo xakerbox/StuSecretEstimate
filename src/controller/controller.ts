@@ -211,4 +211,8 @@ export class ControllerClass {
       console.log(e);
     }
   }
+
+  healthChecker(req: Request, res: Response) {
+    res.status(200).json({ status: 'The server is up and working well.'})
+  }
 }

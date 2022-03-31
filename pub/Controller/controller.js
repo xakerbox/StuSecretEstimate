@@ -183,5 +183,8 @@ class ControllerClass {
             console.log(e);
         }
     }
+    healthChecker(req, res) {
+        res.status(200).json({ status: 'The server is up and working well.' });
+    }
 }
 exports.ControllerClass = ControllerClass;

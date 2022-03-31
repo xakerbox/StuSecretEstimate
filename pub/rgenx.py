@@ -12,6 +12,7 @@ from db_variables import *
 from datetime import datetime
 from fpdf import FPDF  #pip install fpdf2 ... note !  TWO
 from random import random
+from env_rule import *
 
 from db_connection_utils import get_head_data
 from db_connection_utils import get_line_data
@@ -59,9 +60,9 @@ pdf.set_margins(5, 10, 5)
 pdf.set_auto_page_break(auto=True, margin=5)
 
 # LOGO
-pdf.image('/Users/vladimirkuzin/StuProj/Vlad3ServREST/pub/images/tesla_logo.png', 95, 5, 20) #MB_Air path
+# pdf.image('/Users/vladimirkuzin/StuProj/Vlad3ServREST/pub/images/tesla_logo.png', 95, 5, 20) #MB_Air path
 # pdf.image('/Users/vladimir/StuTeslaProj/StuSecretEstimate/pub/images/tesla_logo.png', 95, 5, 20) # MB_Pro path
-# pdf.image('/app/pub/images/tesla_logo.png', 95, 5, 20) # Docker path
+pdf.image(f'{path_to_logo}/tesla_logo.png', 95, 5, 20) # Docker path
 
 
 pdf.set_xy(55, 25)
@@ -254,9 +255,9 @@ def totalBlock(rows):
 list_of_elines()
 totalBlock(rows_in_elemnts_list) 
 # pdf.output(f'/var/www/vhosts/teslaest.com/httpdocs/estimate_reports/EST_{ehead_data["estnum"]}.pdf') teslaestimate.com path
-pdf.output(f'/Users/vladimirkuzin/StuProj/Vlad3ServREST/pub/estimate_reports/EST_{ehead_data["estnum"]}.pdf') #MB_Air path
+# pdf.output(f'/Users/vladimirkuzin/StuProj/Vlad3ServREST/pub/estimate_reports/EST_{ehead_data["estnum"]}.pdf') #MB_Air path
 # pdf.output(f'/Users/vladimir/StuTeslaProj/StuSecretEstimate/pub/estimate_reports/EST_{ehead_data["estnum"]}.pdf') #MB_Pro path
-# pdf.output(f'/app/pub/estimate_reports/EST_{ehead_data["estnum"]}.pdf') #MB_Pro path
+pdf.output(f'{path_to_pdf}/EST_{ehead_data["estnum"]}.pdf') #MB_Pro path
 
 
 print(f'Generating of the report is finished successfuly. Download it by below link on key ESTIMATE_PDF.')

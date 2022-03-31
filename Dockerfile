@@ -25,6 +25,7 @@ RUN pip3 install mysql-connector-python
 RUN pip3 install tabulate
 RUN python3 -m pip install PyMySQL
 RUN pip3 install fpdf2
+RUN pip3 install python-dotenv
 
 RUN npm install
 

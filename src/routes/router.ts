@@ -11,6 +11,8 @@ const tokenValidator = new AuthValidation();
 const router = express.Router();
 const controller = new ControllerClass();
 
+router.get('/', controller.healthChecker)
+
 router.post(
   "/sign-up",
   registerSchema,
