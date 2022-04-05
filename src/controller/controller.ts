@@ -14,7 +14,7 @@ import { exec } from "child_process";
 
 
 dotenv.config({ path: ".././.env" });
-const JWT_SECRET = process.env.JWT_SECRET!;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // PROD or DEV could be changed on .env file.
 const HOST_NAME = process.env.ENVIRONMENT ==  Environment.PROD ?  "190.92.148.46:4200" : "localhost:4200";
